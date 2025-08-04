@@ -1,22 +1,18 @@
-name: Lighthouse Check
-on: 
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-jobs:
-  lighthouse:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      
-      - name: Install Lighthouse
-        run: npm install -g @lhci/cli
-        
-      - name: Run Lighthouse
-        run: lhci autorun --upload.target=temporary-public-storage
+module.exports = {
+  ci: {
+    collect: {
+      staticDistDir: './',
+      url: ['./bodas-com-mx.html'], // Tu archivo HTML principal
+    },
+    assert: {
+      assertions: {
+        'categories:accessibility': ['warn', {minScore: 0.5}],
+        'categories:performance': ['warn', {minScore: 0.6}],
+        'categories:best-practices': ['warn', {minScore: 0.7}],
+      }
+    },
+    upload: {
+      target: 'temporary-public-storage',
+    }
+  }
+};
